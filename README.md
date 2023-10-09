@@ -2,8 +2,9 @@
 Este Chatbot es una aplicación interactiva desarrollada para interactuar con su PDF. Está construido utilizando Open Source Stack. 
 
 <p align=center>
-<img src="src\banner.png" height = 420 weight=550>
+<img src="src\banner.png" align="center" height ="465" width="900"/>
 <p>
+
 </br></br>
 
 ## Arquitectura de la aplicación
