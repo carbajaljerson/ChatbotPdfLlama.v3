@@ -62,7 +62,7 @@ Set-ExecutionPolicy -ExecutionPolicy Bypass -Scope Process -Force
 py ingest.py
 ```
 
-## Para usar el modelo se necesita setear una variable y luego clonar:
+## Para usar el modelo:
 ```sh
 
 wget https://huggingface.co/TheBloke/Llama-2-7B-Chat-GGML/resolve/main/llama-2-7b-chat.ggmlv3.q4_0.bin
