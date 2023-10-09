@@ -1,4 +1,3 @@
-import streamlit as st
 from langchain.embeddings import HuggingFaceEmbeddings
 from langchain.text_splitter import CharacterTextSplitter
 from langchain.vectorstores import FAISS
@@ -15,7 +14,6 @@ importlib.reload(utils)
 
 ABS_PATH: str = os.path.dirname(os.path.abspath(__file__))
 DB_DIR: str = os.path.join(ABS_PATH, "db")
-st.set_page_config(layout="wide")
 
 
 def main():
@@ -31,7 +29,7 @@ def main():
 
     # Initialize session state
     utils.initializeSessionState()
-    st.title("ChatBot de documentos usando llama2 :books:")   
+  
    
     # Create embeddings  
     embeddings = SentenceTransformerEmbeddings(model_name="./model/all-MiniLM-L6-v2", model_kwargs={'device': 'cpu'})

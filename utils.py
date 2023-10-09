@@ -1,5 +1,3 @@
-import streamlit as st
-from streamlit_chat import message
 from langchain.chains import ConversationalRetrievalChain
 from langchain.memory import ConversationBufferMemory
 # from langchain.callbacks.streaming_stdout import StreamingStdOutCallbackHandler
@@ -9,6 +7,7 @@ from transformers import AutoTokenizer, AutoModelForCausalLM, pipeline
 import torch
 from langchain.llms import CTransformers
 from langchain.callbacks.streaming_stdout import StreamingStdOutCallbackHandler
+from langchain.chains import RetrievalQA
 
 # Loads the appropriate tokenizer for the specified model checkpoint
 '''tokenizer = AutoTokenizer.from_pretrained("meta-llama/Llama-2-7b-chat-hf",
@@ -21,25 +20,6 @@ from langchain.callbacks.streaming_stdout import StreamingStdOutCallbackHandler
                                              use_auth_token=True,
                                              local_files_only=False)'''
 
-
-def initializeSessionState():
-    '''
-    Initializes the session state for a Streamlit application.
-
-    This function checks if certain keys ('history', 'generated', 'past') are present in the session state.
-    If they are not present, it initializes them with default values.
-
-    Returns:
-        None
-    '''
-    if 'history' not in st.session_state:
-        st.session_state['history'] = []
-
-    if 'generated' not in st.session_state:
-        st.session_state['generated'] = ["Hola! Preguntame lo que quieras sobre los documentos 🤗"]
-
-    if 'past' not in st.session_state:
-        st.session_state['past'] = ["Hola! 👋"]
         
 
 def conversationChat(query, chain, history):
@@ -65,40 +45,7 @@ def conversationChat(query, chain, history):
 
 
 
-def displayChatHistory(chain):
-    '''
-    Displays a chat interface to interact with a conversation chain and view chat history.
-
-    Args:
-        chain (callable): A function or callable object that takes a dictionary with a question
-            and chat_history as input and returns a dictionary with an answer.
-
-    The function creates a chat interface where users can input questions and receive responses using
-    the provided conversation chain. It also displays the chat history, including user queries and
-    system responses, in a conversation format.
-    '''
-    replyContainer = st.container()
-    container = st.container()
-
-    with container:
-        with st.form(key='my_form', clear_on_submit=True):
-            userInput = st.text_input("Pegunta:", placeholder="Pregunta sobre los documentos", key='input')
-            submitButton = st.form_submit_button(label='Enviar')
-
-        if submitButton and userInput:
-            with st.spinner('Generando respuesta...'):
-                output = conversationChat(userInput, chain, st.session_state['history'])
-
-            st.session_state['past'].append(userInput)
-            st.session_state['generated'].append(output)
-
-    if st.session_state['generated']:
-        with replyContainer:
-            for i in range(len(st.session_state['generated'])):
-                message(st.session_state["past"][i], is_user=True, key=str(i) + '_user', avatar_style="thumbs")
-                message(st.session_state["generated"][i], key=str(i), avatar_style="fun-emoji")
-
-def createConversationalChain(vectorStore):
+def createConversationalChain(vectorStore,prompt):
     '''
     Creates a conversational chain for generating responses in a chat-based application.
 
@@ -129,11 +76,14 @@ def createConversationalChain(vectorStore):
     llm = CTransformers(model="./model/llama-2-7b-chat.ggmlv3.q4_0.bin",
                         streaming=True, 
                         callbacks=[StreamingStdOutCallbackHandler()],
-                        model_type="llama", config={'temperature': 0.02} ,n_ctx=1024,max_tokens= 0)
+                        model_type="llama", config={'temperature': 0.05} ,n_ctx=1024,max_tokens= 0)
    
     memory = ConversationBufferMemory(memory_key="chat_history", return_messages=True)
 
-    chain = ConversationalRetrievalChain.from_llm(llm=llm, chain_type='stuff',
-                                                 retriever=vectorStore.as_retriever(search_kwargs={"k": 2}),
-                                                 memory=memory)
+    #chain = ConversationalRetrievalChain.from_llm(llm=llm, 
+    chain = RetrievalQA.from_chain_type(llm=llm, 
+                                        chain_type='stuff',
+                                        retriever=vectorStore.as_retriever(search_kwargs={"k": 2}),
+                                        memory=memory, 
+                                        chain_type_kwargs={"prompt": prompt})
     return chain
