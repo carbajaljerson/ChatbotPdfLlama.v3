@@ -71,7 +71,7 @@ git lfs install
 git clone https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2
 ```
 
-## Ejecutar chatbot application en Streamlit:
+## Ejecutar chatbot application en Chainlit:
 ```bash
-streamlit run app.py
+chainlit run main.py -w
 ```
