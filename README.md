@@ -5,12 +5,14 @@ Este Chatbot es una aplicación interactiva desarrollada para interactuar con su
 <img src="src\banner.png" height = 420 weight=500>
 <p>
 
+</br></br>
 
 ## Arquitectura de la aplicación
 
 <p align=center>
 <img src="src\arq.png" height = 450 weight=250>
 <p>
+</br></br>
 
 ## Ejecución Local 💻
 
