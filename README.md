@@ -1,4 +1,4 @@
-# Lectura de PDF Chatbot con Langchain y Streamlit
+# Lectura de PDF Chatbot con Langchain y Chainlit
 Este Chatbot es una aplicación interactiva desarrollada para interactuar con su PDF. Está construido utilizando Open Source Stack. 
 
 <p align=center>
@@ -42,11 +42,7 @@ pip install -r requirements.txt`
 ```bash
 python ingest.py
 ```
-## Ejecutar chatbot application en Streamlit:
 
-```bash
-streamlit run chatbot_app.py
-```
 
 ### Si tienes inconvenientes en la ingestion puedes ejecutar en PowerShell
 
