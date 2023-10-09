@@ -6,6 +6,10 @@ from langchain.llms import CTransformers
 from langchain.prompts import PromptTemplate
 from langchain.vectorstores import Chroma
 from langchain.embeddings import SentenceTransformerEmbeddings 
+import chromadb as ch
+from chromadb.config import Settings
+client = ch.Client(Settings(anonymized_telemetry=False))
+
 import utils as utils
 import importlib
 importlib.reload(utils)
